@@ -47,14 +47,14 @@ def write_tracks_list_to_string(playlist_name, tracks_list):
     all_clips = []
     for track in tracks_list:
         all_clips.extend(track.find_clips())
-    for item in sorted(all_clips, key=clip_start):
+    for clip in sorted(all_clips, key=clip_start):
         if clip.media_reference is not None:
-            # start = otio.opentime.to_seconds(item.source_range.start_time)
+            # start = otio.opentime.to_seconds(clip.source_range.start_time)
             # TODO Should this be rounded to the nearest second?
-            duration = otio.opentime.to_seconds(item.source_range.duration)
-            display_title = item.name
+            duration = otio.opentime.to_seconds(clip.source_range.duration)
+            display_title = clip.name
             m3u8_playlist += f"#EXTINF:{duration},{display_title}\n"
-            m3u8_playlist += item.media_reference.target_url + "\n"
+            m3u8_playlist += clip.media_reference.target_url + "\n"
     return m3u8_playlist
 
 def write_to_string(input_otio):
