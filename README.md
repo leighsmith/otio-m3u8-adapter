@@ -57,8 +57,8 @@ pip install -e .
 otiopluginfo m3u8_adapter
 otiopluginfo m3u8d_adapter
 
-# Test an adapter for instance
-otioconvert -i some_timeline.otio -o some_timeline.ext
+# Test the m3ud adapter:
+otioconvert -i some_timeline.otio -o some_timeline.m3u8d
 ```
 
 
