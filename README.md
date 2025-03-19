@@ -1,70 +1,31 @@
-# OpenTimelineIO Plugin Template
+# OpenTimelineIO m3u8 Plugin
 
-Welcome to OpenTimelineIO's plugin template repository!  
-This repository serves as a template for writing new adapters, media linkers, 
-hooks or schemadefs that expand OpenTimelineIO through its plugin system.
-It contains boilerplate files and folders to help you write plugins that 
-register properly when installing through pip should you choose to do so.  
+This is an OpenTimelineIO adapter plugin converting OTIO files to extended
+[m3u/m3u8](https://en.wikipedia.org/wiki/M3U) multimedia playlist files. This
+repository is derived from the OTIO adapter plugin template that expands OpenTimelineIO
+through its plugin system. There are two adapters: `m3u8` which converts a single track
+OpenTimelineIO file to a single `.m3u8` playlist, and `m3u8d` which converts a multiple track
+OpenTimelineIO file to a directory of `.m3u8` playlists, consisting of an audio track
+playlist and a video track playlist, each ordered by clip start time.
+
+See the OpenTimelineIO [documentation](https://opentimelineio.readthedocs.io/en/latest/index.html)
+for more information about OpenTimelineIO in general and
+[here](https://opentimelineio.readthedocs.io/en/latest/tutorials/write-an-adapter.html) for documentation about **adapters**.
 
 ## Licensing
 
-This template repository is licensed under a choice of the 
+This template repository is licensed under
 [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt)
-or the [MIT License](https://opensource.org/licenses/MIT). If you are cloning 
-this repository, you are welcome to have your code under either of these licenses, 
-or a license that is compatible.
+or the [MIT License](https://opensource.org/licenses/MIT).
 
+## Naming convention
 
-# Getting started
+The repository and package names conform to the convention recommended by OpenTimelineIO:
 
-To get started, just push the green **"Use this template"** button at the top right 
-of the repository listing. A dialog will appear where you enter the name and
-location of your new repository.  
-Please consider following the suggested 
-[naming convention](#Suggested-naming-convention) below.  
-Sticking to a naming convention makes it easy for others to spot an 
-OTIO plugin and understand what it does when browsing PyPi or GitHub
-should you choose to share your plugin.
+* Repository and uploaded package name (using hyphens): `otio-m3u8-adapter`
+* Python package name (using underscores): `otio_m3u8_adapter`
 
-Once your new plugin repository is created you should be all set to begin 
-writing your plugin.  
-Please take a look at the notes in the 
-[default folder structure](#Default-folder-structure) section for a few tips.
-
-Please also consult with the OpenTimelineIO [documentation](https://opentimelineio.readthedocs.io/en/latest/index.html)
-for more information about OpenTimelineIO in general and  
-[here](https://opentimelineio.readthedocs.io/en/latest/tutorials/write-an-adapter.html) for documentation about **adapters**  
-[here](https://opentimelineio.readthedocs.io/en/latest/tutorials/write-a-media-linker.html) for documentation about **media linkers**  
-[here](https://opentimelineio.readthedocs.io/en/latest/tutorials/write-a-hookscript.html) for documentation about **hooks**  
-[here](https://opentimelineio.readthedocs.io/en/latest/tutorials/write-a-schemadef.html) for documentation about **shemadefs**  
-
-Good luck and happy coding!
-
-
-## Suggested naming convention
-
-We recommend naming your cloned repository and package name after the 
-following convention:
-
-* Repository and uploaded package name (using hyphens):
-`otio-<dialect>[-<plugintype>]`
-* Python package name (using underscores): `otio_<dialect>_<plugintype>`
-
-
-| Key          | Required | Notes                                                                                                                                                                                                          |
-|:-------------|:--------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `dialect`    |   True   | The filetype, language, application etc. you're adding support for                                                                                                                                             |
-| `plugintype` |  False   | `adapter`, `medialinker`, `hook`, `scemadef` etc.<br>If your plugin contains several of the mentioned components you may omit the<br>plugintype given that the dialect key covers the intention of the plugin. |
-
-Examples:
-* `otio-playlist-adapter` (read or write playlist files)
-* `otio-git-hook` (a hook that commits otio file to git after writing)
-* `otio-ffmpeg-medialinker` (link media references using FFmpeg)
-* `otio-videofx-shemadef` (adds some video effects schema)
-* `otio-mxf` (complex plugin to read, write and link MXF files)
-
-
-## Default folder structure
+## Folder structure
 Below is the included file and folder tree that comes with the plugin template.
   
 ```
@@ -74,65 +35,18 @@ Below is the included file and folder tree that comes with the plugin template.
 ├── pyproject.toml
 ├── README.md
 ├── src
-│   └── your_otio_plugin
+│   └── otio_m3u8_adapter
+│       ├── plugin_manifest.json
 │       ├── adapters
 │       │   ├── __init__.py
-│       │   ├── my_adapter.py
-│       ├── hooks
-│       │   ├── __init__.py
-│       │   ├── my_hook.py
-│       ├── __init__.py
-│       ├── operations
-│       │   ├── __init__.py
-│       │   ├── my_media_linker.py
-│       ├── plugin_manifest.json
-│       └── schemadefs
-│           ├── __init__.py
-│           ├── my_schemadef.py
+│       │   ├── m3u8_adapter.py
+│       │   ├── m3u8d_adapter.py
 ├── tests
     └── test_my_plugin.py
 ```
 
-### Reorganizing the folder structure to suite your plugin
-You're free to rename, remove or restructure the files and folders to best suite 
-your plugin. Simple adapters may not need a deep folder structure (see [example](#simplified-folder-structure) below).  
-Just make sure the `plugin_manifest.json` file is kept and that the contents 
-inside it reflect your choices. This makes sure OpenTimelineIO's plugin system 
-loads your plugin properly.
-
 > **TIP!** Make sure to add a descriptive docstring at the top of your plugin files, so they 
 register properly and inform users of what they do.
-
-#### Simplified folder structure
-Example of a simple adapter plugin. Notice how we removed the "adapters" folder.
-```
-|── LICENSE
-├── src
-│   └── your_otio_adapter
-│       ├── __init__.py
-│       ├── plugin_manifest.json  # Required
-│       ├── my_adapter.py
-├── README.md
-├── pyproject.toml
-├── tests
-    └── test_my_adapter.py
-```
-
-And the manifest file:
-``` json
-{
-    "OTIO_SCHEMA" : "PluginManifest.1",
-    "adapters" : [
-        {
-            "OTIO_SCHEMA" : "Adapter.1",
-            "name" : "my_adapter",
-            "execution_scope" : "in process",
-            "filepath" : "my_adapter.py",
-            "suffixes" : ["xyz"]
-        }
-    ]
-}
-```
 
 ## Testing your plugin during development
 ```
@@ -140,7 +54,8 @@ And the manifest file:
 pip install -e .
 
 # Check if plugin installed correctly
-otiopluginfo myadapter
+otiopluginfo m3u8_adapter
+otiopluginfo m3u8d_adapter
 
 # Test an adapter for instance
 otioconvert -i some_timeline.otio -o some_timeline.ext
@@ -148,9 +63,9 @@ otioconvert -i some_timeline.otio -o some_timeline.ext
 
 
 ### Build your package locally
-You might want to build your package locally to check that everything is behaving
-the way you intended.  
-To do so, simply run `python -m build` in the root of your repo.  
+You might want to build the `otio_m3u8_adapter` package locally to check that everything is behaving
+the way you intended.
+To do so, simply run `python -m build` in the root of your repo.
 This will by default produce wheel and source packages in a "dist" folder.
 >**NOTE!** You might need to add the "build" package to your virtualenv (`pip install build`).
 

@@ -25,10 +25,6 @@ def write_to_file(input_otio, filepath):
     # Create the directory using filepath
     if os.path.exists(filepath):
         raise opentimelineio.exceptions.OTIOError(f"'{filepath}' exists, will not overwrite.")
-#    if not os.path.exists(os.path.dirname(filepath)):
-#        raise exceptions.OTIOError("Directory '{}' does not exist, cannot create '{}'.".format(os.path.dirname(filepath), filepath))
-#    if not os.path.isdir(os.path.dirname(filepath)):
-#        raise exceptions.OTIOError("'{}' is not a directory, cannot create '{}'.".format(os.path.dirname(filepath), filepath))
     os.mkdir(filepath)
     
     # Split out the audio and video tracks as two separate m3u8 tracks.
