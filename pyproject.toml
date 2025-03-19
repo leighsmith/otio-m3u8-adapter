@@ -3,12 +3,12 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "your-otio-plugin"
+name = "otio-m3u8-adapter"
 version = "0.0.1"
 authors = [
-  { name="Example Author", email="author@example.com" },
+  { name="Leigh Smith", email="leigh@leighsmith.com" },
 ]
-description = "A description of your OTIO plugin"
+description = "An OTIO adapter to the m3u8 playlist format"
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [
@@ -26,11 +26,11 @@ classifiers = [
 keywords = ["film", "tv", "editing", "editorial", "edit", "non-linear", "time", "otio", "otio-adapter"]
 
 [project.urls]
-"Homepage" = "https://url/to/your/repo"
-"Bug Tracker" = "https://url/to/your/repo/issues"
+"Homepage" = "https://github.com/leighsmith/otio-m3u8-adapter"
+"Bug Tracker" = "https://github.com/leighsmith/otio-m3u8-adapter/issues"
 
 [project.entry-points."opentimelineio.plugins"]
-your_otio_plugin = "your_otio_plugin"
+your_otio_plugin = "otio_m3u8_adapter"
 
 [tool.hatch.build.targets.sdist]
 # Ensure the sdist includes a setup.py for older pip versions
