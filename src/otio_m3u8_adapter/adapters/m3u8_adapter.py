@@ -34,28 +34,32 @@ import opentimelineio as otio
 #     return timeline
 
 def clip_start(clip):
-    return clip.source_range.start_time
+    return clip.trimmed_range_in_parent().start_time
 
 def write_tracks_list_to_string(playlist_name, tracks_list):
     """
     Turn a list of Tracks into a very simple M3U8 file.
     """
-    m3u8_playlist =  "#EXTM3U\n"
-    m3u8_playlist += f"#PLAYLIST: {playlist_name}\n"
     # Merge the clips in the list of tracks to a single list of clips, sorted on the start
     # time of each audio clip, and output as a single m3u8 file.
     all_clips = []
     for track in tracks_list:
         all_clips.extend(track.find_clips())
+    total_duration = 0
+    m3u8_playlist = ""
     for clip in sorted(all_clips, key=clip_start):
         if clip.media_reference is not None:
-            # start = otio.opentime.to_seconds(clip.source_range.start_time)
             # TODO Should this be rounded to the nearest second?
             duration = otio.opentime.to_seconds(clip.source_range.duration)
+            total_duration += duration
+            start_time = otio.opentime.to_seconds(clip.source_range.start_time)
             display_title = clip.name
             m3u8_playlist += f"#EXTINF:{duration},{display_title}\n"
+            m3u8_playlist += f"#EXT-X-START:TIME-OFFSET={start_time}\n"
+            m3u8_playlist += f"#EXT-X-TARGETDURATION:{duration}\n"
             m3u8_playlist += clip.media_reference.target_url + "\n"
-    return m3u8_playlist
+    m3u8_playlist_header = f"#EXTM3U\n#PLAYLIST:{playlist_name}\n#EXTDURATION:{total_duration}\n"
+    return m3u8_playlist_header + m3u8_playlist
 
 def write_to_string(input_otio):
     """
